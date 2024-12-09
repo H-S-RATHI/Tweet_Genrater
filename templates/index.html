@@ -74,76 +74,56 @@
 
     <script>
 document.getElementById("generate-btn").addEventListener("click", function () {
-    // Get the topic entered by the user
     const topic = document.getElementById("topic").value;
     
-    // Show loading indicator
     document.getElementById("loading-indicator").style.display = "block";
-    document.getElementById("output").innerHTML = ""; // Clear previous output
+    document.getElementById("output").innerHTML = ""; 
     
-    // Prepare the request payload
-    const requestData = {
-        topic: topic
-    };
-    
-    // Send the request to the backend
+    // Use a relative URL that works with both local and deployed environments
     fetch("/generate_tweet", {
         method: "POST",
         headers: { 
             "Content-Type": "application/json" 
         },
-        body: JSON.stringify(requestData)
+        body: JSON.stringify({ topic: topic })
     })
     .then(response => {
-        // Log the raw response for debugging
         console.log('Response status:', response.status);
         console.log('Response headers:', response.headers);
         
-        // Check if the response is ok (status in the range 200-299)
         if (!response.ok) {
-            // Try to get the error text
             return response.text().then(text => {
                 console.error('Error response text:', text);
                 throw new Error(`HTTP error! status: ${response.status}, message: ${text}`);
             });
         }
         
-        // Parse JSON if response is ok
         return response.json();
     })
     .then(data => {
-        // Hide loading indicator
         document.getElementById("loading-indicator").style.display = "none";
         
-        // Log the received data
         console.log('Received data:', data);
         
         if (data.error) {
-            // Display error message
             document.getElementById("output").innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
         } else if (data.tweets && data.tweets.length > 0) {
-            // Display generated tweets
             let tweetsHtml = '<h3>Generated Tweets:</h3>';
             data.tweets.forEach(tweet => {
-                // Trim any leading or trailing spaces before adding to HTML
                 if (tweet.trim() !== "") {
                     tweetsHtml += `<div class="tweet">${tweet}</div>`;
                 }
             });
             document.getElementById("output").innerHTML = tweetsHtml;
         } else {
-            // No tweets generated
             document.getElementById("output").innerHTML = `<p style="color:red;">No tweets could be generated.</p>`;
         }
     })
     .catch(error => {
-        // Hide loading indicator
         document.getElementById("loading-indicator").style.display = "none";
         
-        // Log the full error
         console.error("Full error:", error);
         
-        // Display user-friendly error message
         document.getElementById("output").innerHTML = `
             <p style="color:red;">
                 An unexpected error occurred: ${error.message || 'Unknown error'}

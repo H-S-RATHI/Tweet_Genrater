@@ -1,21 +1,28 @@
 {
+    
     "version": 2,
     "builds": [
-      {
+        {
         "src": "main.py",
         "use": "@vercel/python"
-      }
+        }
     ],
     "routes": [
-      {
+        {
         "src": "/generate_tweet",
+        "methods": ["POST"],
         "dest": "main.py"
-      },
-      {
+        },
+        {
+        "src": "/",
+        "dest": "main.py"
+        },
+        {
         "src": "/(.*)",
         "dest": "main.py"
-      }
+        }
     ],
+      
     "env": {
       "GEMINI_API_KEY": "AIzaSyCAfrJKPuP1GpBEdUl1j0vWAevWBXuTSlA"
     }
