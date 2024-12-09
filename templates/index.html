@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Tweets</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            overflow-x: hidden;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .output {
+            margin-top: 20px;
+            overflow: hidden; 
+        }
+        .loading {
+            font-size: 18px;
+            color: #555;
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3; 
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .tweet {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .input-container {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Generate Tweets</h1>
+
+    <!-- Topic Input -->
+    <div class="input-container">
+        <label for="topic">Enter a topic (optional): </label>
+        <input type="text" id="topic" placeholder="Type a topic...">
+    </div>
+
+    <button id="generate-btn">Generate Tweets</button>
+
+    <!-- Loading indicator -->
+    <div id="loading-indicator" class="loading" style="display: none;">
+        <div class="loading-spinner"></div> Generating tweet...
+    </div>
+
+    <!-- Output container -->
+    <div class="output" id="output"></div>
+
+    <script>
+document.getElementById("generate-btn").addEventListener("click", function () {
+    // Get the topic entered by the user
+    const topic = document.getElementById("topic").value;
+
+    // Show loading indicator
+    document.getElementById("loading-indicator").style.display = "block";
+    document.getElementById("output").innerHTML = ""; // Clear previous output
+
+    // Prepare the request payload
+    const requestData = {
+        topic: topic
+    };
+
+    // Send the request to the backend
+    fetch("/generate_tweet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Hide loading indicator once the response is received
+        document.getElementById("loading-indicator").style.display = "none";
+
+        if (data.error) {
+            // Display error message
+            document.getElementById("output").innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
+        } else {
+            // Display generated tweets
+            let tweetsHtml = '<h3>Generated Tweets:</h3>';
+            data.tweets.forEach(tweet => {
+                // Trim any leading or trailing spaces before adding to HTML
+                if (tweet.trim() !== "") {
+                    tweetsHtml += `<div class="tweet">${tweet}</div>`;
+                }
+            });
+            document.getElementById("output").innerHTML = tweetsHtml;
+        }
+    })
+    .catch(error => {
+        // Hide loading indicator in case of error
+        document.getElementById("loading-indicator").style.display = "none";
+        console.error("Error:", error);
+        document.getElementById("output").innerHTML = `<p style="color:red;">An unexpected error occurred.</p>`;
+    });
+});
+
+    </script>
+</body>
+</html>
