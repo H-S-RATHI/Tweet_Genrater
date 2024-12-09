@@ -82,22 +82,22 @@ def generate_tweet():
 
         # Refined Prompt for Gemini API
         prompt = (
-            f"Based on the following information from this person's past posts across multiple platforms "
-            f"(Twitter, LinkedIn, Facebook, and personal bio), create 10 realistic tweets that sound like they were written by this person themselves. "
-            f"The tone, style, and beliefs should be consistent with the person's previous posts. "
-            f"Ensure that:\n"
-            f"- The content of the tweet is relevant to the context from their past posts, including any topics they've previously discussed.\n"
-            f"- The tweet reflects the person's usual interests, expertise, or lifestyle.\n"
-            f"- The tweet doesn't include any fictional or inaccurate statements like locations, new projects, or unrelated ventures unless those are part of their past content.\n"
-            f"- The tweets should not repeat or replicate previous posts, but should feel like a natural continuation of their conversation or public persona.\n\n"
-            f"Here's the data:\n"
-            f"if Topic is provided by the user, generate tweets specifically based on the topic {topic}, derived from all available data:\n"
-            f"- Previous Tweets: {context}\n"
-            f"- LinkedIn Posts: {linkedin_context}\n"
-            f"- Facebook Posts: {facebook_context}\n"
-            f"- Biodata: {biodata_context}\n\n"
-            f"Generate tweets that align with the above content and maintain the person's authentic voice."
+        f"forgot previous all data that you have stored"
+        f"DO NOT WRITE THE TWEET THAT YOU WROTE LAST TIME"
+        f"if Topic is provided by the user, generate tweets specifically based on the topic {topic}, derived from all available data, that is in {context},{linkedin_context},{facebook_context},{biodata_context} \n"
+        f"Based on the following information from this person's past posts across multiple platforms {context},{linkedin_context},{facebook_context},{biodata_context} create 10 realistic tweets that sound like they were written by this person themselves. "
+        f"The tone, style, and beliefs should be consistent with the person's previous posts. Please ensure the following:\n"
+        f"- Do **not** generate any tweets that mention the current or recent activities, events, or achievements (e.g., 'Just finished a presentation,' 'Launched a new product,' 'Had a meeting,' 'Sold out,' etc.). You do not have any knowledge of what the person is doing at this moment.\n"
+        f"- The tweet must not include any references to real-time events, or anything that would imply immediate action or recent accomplishments.\n"
+        f"Here’s the data to help create the tweets:\n"
+        f"- Previous Tweets: {context}\n"
+        f"- LinkedIn Posts: {linkedin_context}\n"
+        f"- Facebook Posts: {facebook_context}\n"
+        f"- Biodata: {biodata_context}\n\n"
+        f"Generate tweets that reflect the person’s **past** actions, thoughts, or ideas, without any real-time or current event mentions."
         )
+
+
 
         # Generate tweets using Gemini API
         response = model.generate_content(prompt)
