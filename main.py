@@ -14,7 +14,7 @@ CORS(app)  # Add CORS support
 logging.basicConfig(level=logging.DEBUG)
 
 # Configure Gemini API using environment variable
-API_KEY = os.getenv('GEMINI_API_KEY')
+API_KEY ="AIzaSyCAfrJKPuP1GpBEdUl1j0vWAevWBXuTSlA"
 if not API_KEY:
     logging.error("Gemini API key is not set in environment variables")
     API_KEY = ""  # Fallback, though this will cause issues
