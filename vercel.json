@@ -8,9 +8,15 @@
     ],
     "routes": [
       {
+        "src": "/generate_tweet",
+        "dest": "main.py"
+      },
+      {
         "src": "/(.*)",
-        "dest": "/main.py"
+        "dest": "main.py"
       }
-    ]
+    ],
+    "env": {
+      "GEMINI_API_KEY": "AIzaSyCAfrJKPuP1GpBEdUl1j0vWAevWBXuTSlA"
+    }
   }
-  
